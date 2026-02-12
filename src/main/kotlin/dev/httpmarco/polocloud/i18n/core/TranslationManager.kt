@@ -5,10 +5,13 @@ import dev.httpmarco.polocloud.i18n.loader.TranslationLoader
 import dev.httpmarco.polocloud.i18n.model.Language
 import dev.httpmarco.polocloud.i18n.model.TranslationPack
 import dev.httpmarco.polocloud.i18n.model.TranslationPackMeta
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.util.concurrent.ConcurrentHashMap
 
 class TranslationManager(private val loader: TranslationLoader) {
 
+    private val logger: Logger = LogManager.getLogger(TranslationManager::class.java)
     private val metaCache = ConcurrentHashMap<String, TranslationPackMeta>()
     private val packCache = ConcurrentHashMap<String, TranslationPack>()
 
@@ -30,7 +33,7 @@ class TranslationManager(private val loader: TranslationLoader) {
     fun translate(pack: String, language: Language, key: String): String {
         val translationPack = pack(pack, language)
 
-        return translationPack.get(key) ?: fallbackOrThrow(translationPack, key)
+        return translationPack.get(key) ?: fallback(translationPack, key)
     }
 
     fun translate(pack: String, language: Language, key: String, vararg placeholders: Pair<String, Any?>): String {
@@ -56,20 +59,33 @@ class TranslationManager(private val loader: TranslationLoader) {
         return loader.loadPack(meta, language)
     }
 
-    private fun fallbackOrThrow(pack: TranslationPack, key: String): String {
+    private fun fallback(pack: TranslationPack, key: String): String {
         val defaultLanguage = pack.meta.defaultLanguage
 
         if (pack.language == defaultLanguage) {
-            error(
-                "Missing translation key '$key' in pack '${pack.meta.name}' for language '${pack.language.code}'"
+            logger.warn(
+                "Missing translation key '{}' in pack '{}' for language '{}'",
+                key,
+                pack.meta.name,
+                pack.language.code
             )
         }
 
         val fallbackPack = pack(pack.meta.name, defaultLanguage)
+        val translation = fallbackPack.get(key)
+        if (translation != null) {
+            return translation
+        }
 
-        return fallbackPack.get(key) ?: error(
-            "Missing translation key '$key' in pack '${pack.meta.name}' (including fallback '${defaultLanguage.code}')"
+        logger.warn(
+            "Missing translation key '{}' in pack '{}' for language '{}' (including fallback '{}')",
+            key,
+            pack.meta.name,
+            pack.language.code,
+            defaultLanguage.code
         )
+
+        return key
     }
 
     private fun cacheKey(pack: String, language: Language): String = "$pack:${language.code}"

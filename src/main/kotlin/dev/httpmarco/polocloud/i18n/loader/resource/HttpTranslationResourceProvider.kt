@@ -1,10 +1,14 @@
 package dev.httpmarco.polocloud.i18n.loader.resource
 
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URI
 
 class HttpTranslationResourceProvider(private val baseUrl: String) : TranslationResourceProvider {
+
+    private val logger: Logger = LogManager.getLogger(HttpTranslationResourceProvider::class.java)
 
     override fun openMeta(pack: String): InputStream {
         return open("$pack/pack.json")
@@ -23,7 +27,7 @@ class HttpTranslationResourceProvider(private val baseUrl: String) : Translation
         connection.readTimeout = 5000
 
         if (connection.responseCode != 200) {
-            error("Failed to download translation resource: $uri (HTTP ${connection.responseCode})")
+            logger.error("Failed to download translation resource: {} (HTTP {})", uri, connection.responseCode)
         }
 
         return connection.inputStream

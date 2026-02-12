@@ -17,7 +17,6 @@ object TranslationService {
             Thread { executor.shutdown() }
         )
     }
-    //TODO better error logging without crashes like error
 
     fun init(baseUrl: String = "https://raw.githubusercontent.com/thePolocloud/polocloud-translations/refs/heads/main", cacheDir: File = File(".translations")) {
         val httpProvider = HttpTranslationResourceProvider(baseUrl)
