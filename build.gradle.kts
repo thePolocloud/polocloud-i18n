@@ -24,7 +24,9 @@ kotlin {
 
 publishing {
     publications {
-        withType<MavenPublication>().configureEach {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+
             pom {
                 name.set("polocloud-i18n")
                 description.set("Dynamic translation system for the PoloCloud ecosystem.")
