@@ -8,8 +8,6 @@ automatic GitHub updates, in-memory caching, and `.properties` based language fi
 
 It is designed to provide flexible and scalable localization for PoloCloud nodes and plugins.
 
----
-
 ## ✨ Features
 
 - 🌐 Multi-language support
@@ -22,7 +20,6 @@ It is designed to provide flexible and scalable localization for PoloCloud nodes
 - 🔁 Fallback language support
 - 🧩 Placeholder formatting
 
----
 
 ## 🏗 Translation Pack Structure
 
@@ -66,8 +63,6 @@ welcome.message=Willkommen bei PoloCloud!
 node.starting=Node startet...
 ```
 
----
-
 ## 🚀 How It Works
 
 1. You initialize the TranslationService.
@@ -84,8 +79,6 @@ node.starting=Node startet...
 > [!WARNING]
 > Only the requested language is loaded — not all languages of a pack.
 
----
-
 ## 📦 Installation
 
 Add the dependency to your project:
@@ -99,9 +92,6 @@ dependencies {
 ```
 
 Replace `<version>` with the latest release.
-
----
-
 
 ## 🚀 Quick Start
 
@@ -121,8 +111,6 @@ TranslationService.init(
 ```
 
 to overwrite the defaults.
-
----
 
 ### 2️⃣ Translate a Key
 
@@ -145,8 +133,6 @@ val message = TranslationService.tr(
 )
 ```
 
----
-
 ### 3️⃣ Using Placeholders
 
 ```kotlin
@@ -158,8 +144,6 @@ val message = TranslationService.tr(
 )
 ```
 
----
-
 ### 4️⃣ Using the Fluent API
 
 ```kotlin
@@ -168,8 +152,6 @@ val message = TranslationService
     .language("en_US")
     .format("player.join", "name" to "Marco")
 ```
-
----
 
 ### 5️⃣ Preloading (Optional)
 
@@ -185,8 +167,6 @@ Preload asynchronously:
 TranslationService.preloadAsync("default-pack")
 ```
 
----
-
 ## 🔁 Fallback Behavior
 
 If a key is missing:
@@ -195,8 +175,6 @@ If a key is missing:
 2. If still missing:
     - A warning is logged.
     - The key itself is returned.
-
----
 
 ## 🧠 Caching System
 
@@ -208,8 +186,6 @@ If a key is missing:
     - The pack is missing
     - A new version is available
 
----
-
 ## 📁 Local Storage
 
 Translation packs are stored in:
@@ -217,8 +193,6 @@ Translation packs are stored in:
 ```
 .translations/<pack-name>/
 ```
-
----
 
 ## 🔄 Update Mechanism
 
@@ -233,8 +207,6 @@ When loading a pack:
 
 This allows centralized updates without manual file management.
 
----
-
 ## 🤝 Contributing
 
 You can contribute by:
@@ -243,12 +215,14 @@ You can contribute by:
 2. Create a feature branch
 3. Submit a Pull Request
 
----
-
 ## 📄 License
 
-Licensed under the Apache 2.0 License.
+polocloud-i18n is licensed under the [Apache 2.0 License](LICENSE).
 
 ---
 
-Made for scalable cloud-based environments.
+<p align="center">
+    This project was created by <a href="https://github.com/RECHERGG/">RECHERGG</a> and the <a href="https://polocloud.de">polocloud.de</a> team.
+    <br>
+    ©️ 2026 thePolocloud. All rights reserved.
+</p>
