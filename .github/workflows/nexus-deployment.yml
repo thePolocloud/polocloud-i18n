@@ -26,12 +26,6 @@ jobs:
 
       - name: Publish polocloud-i18n to Sonatype
         env:
-          ossrhUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ossrhPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-        run: ./gradlew :publish
-
-      - name: Publish common to Sonatype
-        env:
-          ossrhUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ossrhPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          OSSRH_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         run: ./gradlew :publish
