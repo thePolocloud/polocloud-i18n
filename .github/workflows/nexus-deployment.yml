@@ -28,10 +28,10 @@ jobs:
         env:
           ossrhUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ossrhPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-        run: ./gradlew :common:publish
+        run: ./gradlew :publish
 
       - name: Publish common to Sonatype
         env:
           ossrhUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           ossrhPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-        run: ./gradlew :common:publish
+        run: ./gradlew :publish
