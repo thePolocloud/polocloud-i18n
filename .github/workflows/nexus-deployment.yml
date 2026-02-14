@@ -26,6 +26,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Publish polocloud-i18n to Sonatype
         env:
           OSSRH_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
