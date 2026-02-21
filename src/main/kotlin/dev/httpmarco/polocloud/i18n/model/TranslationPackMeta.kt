@@ -1,8 +1,10 @@
 package dev.httpmarco.polocloud.i18n.model
 
+import java.util.Locale
+
 data class TranslationPackMeta(
     val name: String,
     val version: String,
-    val defaultLanguage: Language,
-    val languages: Set<Language>,
+    val defaultLanguage: Locale,
+    val languages: Set<Locale>,
 )

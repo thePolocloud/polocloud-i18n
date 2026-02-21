@@ -21,9 +21,9 @@ internal object MetaParser {
             return TranslationPackMeta(
                 name = dto.name,
                 version = dto.version,
-                defaultLanguage = Language(dto.defaultLanguage),
+                defaultLanguage = Language.of(dto.defaultLanguage),
                 languages = dto.languages
-                    .map(::Language)
+                    .map { Language.of(it) }
                     .toSet()
             )
         } catch (exception: JsonSyntaxException) {

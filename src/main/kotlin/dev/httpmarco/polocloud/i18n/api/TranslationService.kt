@@ -6,12 +6,13 @@ import dev.httpmarco.polocloud.i18n.loader.resource.CachingTranslationResourcePr
 import dev.httpmarco.polocloud.i18n.loader.resource.HttpTranslationResourceProvider
 import dev.httpmarco.polocloud.i18n.model.Language
 import java.io.File
+import java.util.Locale
 import java.util.concurrent.Executors
 
 object TranslationService {
 
     private lateinit var manager: TranslationManager
-    private var defaultLanguage: Language = Language("en_US")
+    private var defaultLanguage: Locale = Locale.ENGLISH
     private val preloadExecutor = Executors.newFixedThreadPool(2).also { executor ->
         Runtime.getRuntime().addShutdownHook(
             Thread { executor.shutdown() }
@@ -32,7 +33,18 @@ object TranslationService {
 
         return manager.translate(
             pack = pack,
-            language = Language(language),
+            language = Language.of(language),
+            key = key,
+            placeholders = placeholders
+        )
+    }
+
+    fun tr(pack: String, language: Locale, key: String, vararg placeholders: Pair<String, Any?>): String {
+        checkInitialized()
+
+        return manager.translate(
+            pack = pack,
+            language = language,
             key = key,
             placeholders = placeholders
         )
@@ -49,12 +61,27 @@ object TranslationService {
         )
     }
 
-    fun preload(pack: String, language: Language = defaultLanguage) {
+    fun preload(pack: String, language: String) {
+        checkInitialized()
+        manager.pack(pack, Language.of(language))
+    }
+
+    fun preload(pack: String, language: Locale = defaultLanguage) {
         checkInitialized()
         manager.pack(pack, language)
     }
 
-    fun preloadAsync(pack: String, language: Language = defaultLanguage) {
+    fun preloadAsync(pack: String, language: String) {
+        preloadExecutor.submit {
+            try {
+                preload(pack, language)
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+    }
+
+    fun preloadAsync(pack: String, language: Locale = defaultLanguage) {
         preloadExecutor.submit {
             try {
                 preload(pack, language)
@@ -70,7 +97,11 @@ object TranslationService {
     }
 
     fun defaultLanguage(language: String) {
-        defaultLanguage = Language(language)
+        defaultLanguage = Language.of(language)
+    }
+
+    fun defaultLanguage(language: Locale) {
+        defaultLanguage = language
     }
 
     fun availableLanguages(pack: String): Set<String> {
@@ -78,7 +109,7 @@ object TranslationService {
 
         return manager
             .availableLanguages(pack)
-            .map { it.code }
+            .map { Language.code(it) }
             .toSet()
     }
 
@@ -90,11 +121,15 @@ object TranslationService {
 
     class PackAccessor internal constructor(private val pack: String) {
         fun language(language: String): LanguageAccessor {
-            return LanguageAccessor(pack, Language(language))
+            return LanguageAccessor(pack, Language.of(language))
+        }
+
+        fun language(language: Locale): LanguageAccessor {
+            return LanguageAccessor(pack, language)
         }
     }
 
-    class LanguageAccessor(private val pack: String, private val language: Language) {
+    class LanguageAccessor(private val pack: String, private val language: Locale) {
         fun get(key: String): String {
             return manager.translate(pack, language, key)
         }

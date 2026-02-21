@@ -7,6 +7,7 @@ import dev.httpmarco.polocloud.i18n.model.TranslationPack
 import dev.httpmarco.polocloud.i18n.model.TranslationPackMeta
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 
 class TranslationManager(private val loader: TranslationLoader) {
@@ -19,7 +20,7 @@ class TranslationManager(private val loader: TranslationLoader) {
      * Returns a fully loaded TranslationPack.
      * Lazy loads meta + language file if necessary.
      */
-    fun pack(pack: String, language: Language): TranslationPack {
+    fun pack(pack: String, language: Locale): TranslationPack {
         val cacheKey = cacheKey(pack, language)
 
         return packCache.computeIfAbsent(cacheKey) {
@@ -30,13 +31,13 @@ class TranslationManager(private val loader: TranslationLoader) {
     /**
      * Returns translation directly.
      */
-    fun translate(pack: String, language: Language, key: String): String {
+    fun translate(pack: String, language: Locale, key: String): String {
         val translationPack = pack(pack, language)
 
         return translationPack.get(key) ?: fallback(translationPack, key)
     }
 
-    fun translate(pack: String, language: Language, key: String, vararg placeholders: Pair<String, Any?>): String {
+    fun translate(pack: String, language: Locale, key: String, vararg placeholders: Pair<String, Any?>): String {
         val raw = translate(pack, language, key)
 
         if (placeholders.isEmpty()) {
@@ -45,14 +46,15 @@ class TranslationManager(private val loader: TranslationLoader) {
 
         return PlaceholderFormatter.format(raw, placeholders.toMap())
     }
-    fun availableLanguages(pack: String): Set<Language> {
+
+    fun availableLanguages(pack: String): Set<Locale> {
         val meta = loader.loadMeta(pack)
 
         metaCache[pack] = meta
         return meta.languages
     }
 
-    private fun loadPackInternal(pack: String, language: Language): TranslationPack {
+    private fun loadPackInternal(pack: String, language: Locale): TranslationPack {
         val meta = loader.loadMeta(pack)
         metaCache[pack] = meta
 
@@ -67,7 +69,7 @@ class TranslationManager(private val loader: TranslationLoader) {
                 "Missing translation key '{}' in pack '{}' for language '{}'",
                 key,
                 pack.meta.name,
-                pack.language.code
+                Language.code(pack.language)
             )
         }
 
@@ -81,12 +83,12 @@ class TranslationManager(private val loader: TranslationLoader) {
             "Missing translation key '{}' in pack '{}' for language '{}' (including fallback '{}')",
             key,
             pack.meta.name,
-            pack.language.code,
-            defaultLanguage.code
+            Language.code(pack.language),
+            Language.code(defaultLanguage)
         )
 
         return key
     }
 
-    private fun cacheKey(pack: String, language: Language): String = "$pack:${language.code}"
+    private fun cacheKey(pack: String, language: Locale): String = "$pack:${Language.code(language)}"
 }

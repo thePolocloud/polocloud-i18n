@@ -6,6 +6,7 @@ import dev.httpmarco.polocloud.i18n.loader.resource.TranslationResourceProvider
 import dev.httpmarco.polocloud.i18n.model.Language
 import dev.httpmarco.polocloud.i18n.model.TranslationPack
 import dev.httpmarco.polocloud.i18n.model.TranslationPackMeta
+import java.util.Locale
 
 class DefaultTranslationLoader(
     private val resourceProvider: TranslationResourceProvider
@@ -18,13 +19,13 @@ class DefaultTranslationLoader(
         }
     }
 
-    override fun loadPack(meta: TranslationPackMeta, language: Language): TranslationPack {
+    override fun loadPack(meta: TranslationPackMeta, language: Locale): TranslationPack {
         require(meta.languages.contains(language)) {
-            "Language '${language.code}' not supported by pack '${meta.name}'"
+            "Language '${Language.code(language)}' not supported by pack '${meta.name}'"
         }
 
         val translations = resourceProvider
-            .openLanguageFile(meta.name, language.code)
+            .openLanguageFile(meta.name, Language.code(language))
             .use(PropertiesParser::parse)
 
         return TranslationPack(
