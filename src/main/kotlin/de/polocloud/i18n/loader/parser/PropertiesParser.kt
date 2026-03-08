@@ -1,4 +1,4 @@
-package dev.httpmarco.polocloud.i18n.loader.parser
+package de.polocloud.i18n.loader.parser
 
 import java.io.InputStream
 import java.nio.charset.StandardCharsets

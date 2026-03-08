@@ -1,4 +1,4 @@
-package dev.httpmarco.polocloud.i18n.loader.resource
+package de.polocloud.i18n.loader.resource
 
 import java.io.InputStream
 

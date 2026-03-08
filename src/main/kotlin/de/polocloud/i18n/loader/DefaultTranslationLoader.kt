@@ -1,38 +1,38 @@
-package dev.httpmarco.polocloud.i18n.loader
+package de.polocloud.i18n.loader
 
-import dev.httpmarco.polocloud.i18n.loader.parser.MetaParser
-import dev.httpmarco.polocloud.i18n.loader.parser.PropertiesParser
-import dev.httpmarco.polocloud.i18n.loader.resource.TranslationResourceProvider
-import dev.httpmarco.polocloud.i18n.model.Language
-import dev.httpmarco.polocloud.i18n.model.TranslationPack
-import dev.httpmarco.polocloud.i18n.model.TranslationPackMeta
+import de.polocloud.i18n.loader.parser.MetaParser
+import de.polocloud.i18n.loader.parser.PropertiesParser
+import de.polocloud.i18n.loader.resource.TranslationResourceProvider
+import de.polocloud.i18n.model.Language
+import de.polocloud.i18n.model.TranslationPack
+import de.polocloud.i18n.model.TranslationPackMeta
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.util.Locale
 
 class DefaultTranslationLoader(
-    private val resourceProvider: TranslationResourceProvider
-) : TranslationLoader {
+    private val resourceProvider: de.polocloud.i18n.loader.resource.TranslationResourceProvider
+) : de.polocloud.i18n.loader.TranslationLoader {
 
     private val logger: Logger = LogManager.getLogger(DefaultTranslationLoader::class.java)
 
-    override fun loadMeta(pack: String): TranslationPackMeta {
+    override fun loadMeta(pack: String): de.polocloud.i18n.model.TranslationPackMeta {
         resourceProvider.openMeta(pack).use { input ->
             val content = input.bufferedReader().readText()
-            return MetaParser.parse(content)
+            return _root_ide_package_.de.polocloud.i18n.loader.parser.MetaParser.parse(content)
         }
     }
 
-    override fun loadPack(meta: TranslationPackMeta, language: Locale): TranslationPack {
+    override fun loadPack(meta: de.polocloud.i18n.model.TranslationPackMeta, language: Locale): de.polocloud.i18n.model.TranslationPack {
         val resolvedLanguage = when {
             meta.languages.contains(language) -> language
 
             meta.languages.contains(meta.defaultLanguage) -> {
                 logger.warn(
                     "Language '{}' not supported by pack '{}'. Falling back to default '{}'.",
-                    Language.code(language),
+                    _root_ide_package_.de.polocloud.i18n.model.Language.code(language),
                     meta.name,
-                    Language.code(meta.defaultLanguage)
+                    _root_ide_package_.de.polocloud.i18n.model.Language.code(meta.defaultLanguage)
                 )
                 meta.defaultLanguage
             }
@@ -41,9 +41,9 @@ class DefaultTranslationLoader(
                 val fallback = meta.languages.first()
                 logger.warn(
                     "Language '{}' not supported by pack '{}'. Default language unavailable. Falling back to '{}'.",
-                    Language.code(language),
+                    _root_ide_package_.de.polocloud.i18n.model.Language.code(language),
                     meta.name,
-                    Language.code(fallback)
+                    _root_ide_package_.de.polocloud.i18n.model.Language.code(fallback)
                 )
                 fallback
             }
@@ -60,10 +60,10 @@ class DefaultTranslationLoader(
         }
 
         val translations = resourceProvider
-            .openLanguageFile(meta.name, Language.code(resolvedLanguage))
-            .use(PropertiesParser::parse)
+            .openLanguageFile(meta.name, _root_ide_package_.de.polocloud.i18n.model.Language.code(resolvedLanguage))
+            .use(_root_ide_package_.de.polocloud.i18n.loader.parser.PropertiesParser::parse)
 
-        return TranslationPack(
+        return _root_ide_package_.de.polocloud.i18n.model.TranslationPack(
             meta = meta,
             language = language,
             translations = translations

@@ -1,4 +1,4 @@
-package dev.httpmarco.polocloud.i18n.core.format
+package de.polocloud.i18n.core.format
 
 internal object PlaceholderFormatter {
 

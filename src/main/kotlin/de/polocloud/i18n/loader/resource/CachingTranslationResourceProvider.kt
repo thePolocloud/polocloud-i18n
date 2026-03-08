@@ -1,7 +1,7 @@
-package dev.httpmarco.polocloud.i18n.loader.resource
+package de.polocloud.i18n.loader.resource
 
 import com.google.gson.Gson
-import dev.httpmarco.polocloud.i18n.loader.parser.MetaDto
+import de.polocloud.i18n.loader.parser.MetaDto
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Files
@@ -9,8 +9,8 @@ import java.nio.file.attribute.DosFileAttributeView
 
 class CachingTranslationResourceProvider(
     private val cacheDirectory: File,
-    private val remoteProvider: TranslationResourceProvider
-) : TranslationResourceProvider {
+    private val remoteProvider: de.polocloud.i18n.loader.resource.TranslationResourceProvider
+) : de.polocloud.i18n.loader.resource.TranslationResourceProvider {
 
     private val gson = Gson()
 
@@ -73,7 +73,7 @@ class CachingTranslationResourceProvider(
     }
 
     private fun extractVersion(json: String): String {
-        val dto = gson.fromJson(json, MetaDto::class.java)
+        val dto = gson.fromJson(json, _root_ide_package_.de.polocloud.i18n.loader.parser.MetaDto::class.java)
         return dto.version
     }
 

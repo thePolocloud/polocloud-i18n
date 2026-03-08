@@ -1,4 +1,4 @@
-package dev.httpmarco.polocloud.i18n.model
+package de.polocloud.i18n.model
 
 import java.util.Locale
 

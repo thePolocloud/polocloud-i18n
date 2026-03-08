@@ -1,4 +1,4 @@
-package dev.httpmarco.polocloud.i18n.loader.resource
+package de.polocloud.i18n.loader.resource
 
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -6,7 +6,8 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URI
 
-class HttpTranslationResourceProvider(private val baseUrl: String) : TranslationResourceProvider {
+class HttpTranslationResourceProvider(private val baseUrl: String) :
+    de.polocloud.i18n.loader.resource.TranslationResourceProvider {
 
     private val logger: Logger = LogManager.getLogger(HttpTranslationResourceProvider::class.java)
 

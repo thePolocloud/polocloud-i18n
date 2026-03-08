@@ -1,17 +1,17 @@
-package dev.httpmarco.polocloud.i18n.api
+package de.polocloud.i18n.api
 
-import dev.httpmarco.polocloud.i18n.core.TranslationManager
-import dev.httpmarco.polocloud.i18n.loader.DefaultTranslationLoader
-import dev.httpmarco.polocloud.i18n.loader.resource.CachingTranslationResourceProvider
-import dev.httpmarco.polocloud.i18n.loader.resource.HttpTranslationResourceProvider
-import dev.httpmarco.polocloud.i18n.model.Language
+import de.polocloud.i18n.core.TranslationManager
+import de.polocloud.i18n.loader.DefaultTranslationLoader
+import de.polocloud.i18n.loader.resource.CachingTranslationResourceProvider
+import de.polocloud.i18n.loader.resource.HttpTranslationResourceProvider
+import de.polocloud.i18n.model.Language
 import java.io.File
 import java.util.Locale
 import java.util.concurrent.Executors
 
 object TranslationService {
 
-    private lateinit var manager: TranslationManager
+    private lateinit var manager: de.polocloud.i18n.core.TranslationManager
     private var defaultLanguage: Locale = Locale.ENGLISH
     private val preloadExecutor = Executors.newFixedThreadPool(2).also { executor ->
         Runtime.getRuntime().addShutdownHook(
@@ -20,12 +20,15 @@ object TranslationService {
     }
 
     fun init(baseUrl: String = "https://raw.githubusercontent.com/thePolocloud/polocloud-translations/refs/heads/main", cacheDir: File = File(".translations")) {
-        val httpProvider = HttpTranslationResourceProvider(baseUrl)
-        val cachingProvider = CachingTranslationResourceProvider(cacheDir, httpProvider)
+        val httpProvider = _root_ide_package_.de.polocloud.i18n.loader.resource.HttpTranslationResourceProvider(baseUrl)
+        val cachingProvider = _root_ide_package_.de.polocloud.i18n.loader.resource.CachingTranslationResourceProvider(
+            cacheDir,
+            httpProvider
+        )
 
-        val loader = DefaultTranslationLoader(cachingProvider)
+        val loader = _root_ide_package_.de.polocloud.i18n.loader.DefaultTranslationLoader(cachingProvider)
 
-        manager = TranslationManager(loader)
+        manager = _root_ide_package_.de.polocloud.i18n.core.TranslationManager(loader)
     }
 
     fun tr(pack: String, language: String, key: String, vararg placeholders: Pair<String, Any?>): String {
@@ -33,7 +36,7 @@ object TranslationService {
 
         return manager.translate(
             pack = pack,
-            language = Language.of(language),
+            language = _root_ide_package_.de.polocloud.i18n.model.Language.of(language),
             key = key,
             placeholders = placeholders
         )
@@ -63,7 +66,7 @@ object TranslationService {
 
     fun preload(pack: String, language: String) {
         checkInitialized()
-        manager.pack(pack, Language.of(language))
+        manager.pack(pack, _root_ide_package_.de.polocloud.i18n.model.Language.of(language))
     }
 
     fun preload(pack: String, language: Locale = defaultLanguage) {
@@ -97,7 +100,7 @@ object TranslationService {
     }
 
     fun defaultLanguage(language: String) {
-        defaultLanguage = Language.of(language)
+        defaultLanguage = _root_ide_package_.de.polocloud.i18n.model.Language.of(language)
     }
 
     fun defaultLanguage(language: Locale) {
@@ -109,7 +112,7 @@ object TranslationService {
 
         return manager
             .availableLanguages(pack)
-            .map { Language.code(it) }
+            .map { _root_ide_package_.de.polocloud.i18n.model.Language.code(it) }
             .toSet()
     }
 
@@ -121,7 +124,7 @@ object TranslationService {
 
     class PackAccessor internal constructor(private val pack: String) {
         fun language(language: String): LanguageAccessor {
-            return LanguageAccessor(pack, Language.of(language))
+            return LanguageAccessor(pack, _root_ide_package_.de.polocloud.i18n.model.Language.of(language))
         }
 
         fun language(language: Locale): LanguageAccessor {
