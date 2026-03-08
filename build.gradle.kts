@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.nexus.publish)
 }
 
-group = "de.polocloud.polocloud"
+group = "de.polocloud"
 // version is now set by gradle/version.gradle.kts — do NOT set it here
 
 repositories {
