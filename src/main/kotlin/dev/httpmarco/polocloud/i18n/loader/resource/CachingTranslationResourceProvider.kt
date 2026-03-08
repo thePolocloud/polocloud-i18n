@@ -4,6 +4,8 @@ import com.google.gson.Gson
 import dev.httpmarco.polocloud.i18n.loader.parser.MetaDto
 import java.io.File
 import java.io.InputStream
+import java.nio.file.Files
+import java.nio.file.attribute.DosFileAttributeView
 
 class CachingTranslationResourceProvider(
     private val cacheDirectory: File,
@@ -15,6 +17,10 @@ class CachingTranslationResourceProvider(
     init {
         if (!cacheDirectory.exists()) {
             cacheDirectory.mkdirs()
+        }
+
+        if (!cacheDirectory.name.startsWith(".")) {
+            Files.getFileAttributeView(cacheDirectory.toPath(), DosFileAttributeView::class.java)?.setHidden(true)
         }
     }
 
