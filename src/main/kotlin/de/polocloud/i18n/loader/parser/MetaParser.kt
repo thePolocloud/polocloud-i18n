@@ -9,21 +9,21 @@ internal object MetaParser {
 
     private val gson = Gson()
 
-    fun parse(content: String): de.polocloud.i18n.model.TranslationPackMeta {
+    fun parse(content: String): TranslationPackMeta {
         try {
-            val dto = gson.fromJson(content, _root_ide_package_.de.polocloud.i18n.loader.parser.MetaDto::class.java)
+            val dto = gson.fromJson(content, MetaDto::class.java)
 
             require(dto.name.isNotBlank()) { "Pack meta name is blank" }
             require(dto.version.isNotBlank()) { "Pack meta version is blank" }
             require(dto.defaultLanguage.isNotBlank()) { "Pack meta defaultLanguage is blank" }
             require(dto.languages.isNotEmpty()) { "Pack meta languages list is empty" }
 
-            return _root_ide_package_.de.polocloud.i18n.model.TranslationPackMeta(
+            return TranslationPackMeta(
                 name = dto.name,
                 version = dto.version,
-                defaultLanguage = _root_ide_package_.de.polocloud.i18n.model.Language.of(dto.defaultLanguage),
+                defaultLanguage = Language.of(dto.defaultLanguage),
                 languages = dto.languages
-                    .map { _root_ide_package_.de.polocloud.i18n.model.Language.of(it) }
+                    .map { Language.of(it) }
                     .toSet()
             )
         } catch (exception: JsonSyntaxException) {

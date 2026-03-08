@@ -20,15 +20,15 @@ object TranslationService {
     }
 
     fun init(baseUrl: String = "https://raw.githubusercontent.com/thePolocloud/polocloud-translations/refs/heads/main", cacheDir: File = File(".translations")) {
-        val httpProvider = _root_ide_package_.de.polocloud.i18n.loader.resource.HttpTranslationResourceProvider(baseUrl)
-        val cachingProvider = _root_ide_package_.de.polocloud.i18n.loader.resource.CachingTranslationResourceProvider(
+        val httpProvider = HttpTranslationResourceProvider(baseUrl)
+        val cachingProvider = CachingTranslationResourceProvider(
             cacheDir,
             httpProvider
         )
 
-        val loader = _root_ide_package_.de.polocloud.i18n.loader.DefaultTranslationLoader(cachingProvider)
+        val loader = DefaultTranslationLoader(cachingProvider)
 
-        manager = _root_ide_package_.de.polocloud.i18n.core.TranslationManager(loader)
+        manager = TranslationManager(loader)
     }
 
     fun tr(pack: String, language: String, key: String, vararg placeholders: Pair<String, Any?>): String {
@@ -36,7 +36,7 @@ object TranslationService {
 
         return manager.translate(
             pack = pack,
-            language = _root_ide_package_.de.polocloud.i18n.model.Language.of(language),
+            language = Language.of(language),
             key = key,
             placeholders = placeholders
         )
@@ -66,7 +66,7 @@ object TranslationService {
 
     fun preload(pack: String, language: String) {
         checkInitialized()
-        manager.pack(pack, _root_ide_package_.de.polocloud.i18n.model.Language.of(language))
+        manager.pack(pack, Language.of(language))
     }
 
     fun preload(pack: String, language: Locale = defaultLanguage) {
@@ -100,7 +100,7 @@ object TranslationService {
     }
 
     fun defaultLanguage(language: String) {
-        defaultLanguage = _root_ide_package_.de.polocloud.i18n.model.Language.of(language)
+        defaultLanguage = Language.of(language)
     }
 
     fun defaultLanguage(language: Locale) {
@@ -112,7 +112,7 @@ object TranslationService {
 
         return manager
             .availableLanguages(pack)
-            .map { _root_ide_package_.de.polocloud.i18n.model.Language.code(it) }
+            .map { Language.code(it) }
             .toSet()
     }
 
@@ -124,7 +124,7 @@ object TranslationService {
 
     class PackAccessor internal constructor(private val pack: String) {
         fun language(language: String): LanguageAccessor {
-            return LanguageAccessor(pack, _root_ide_package_.de.polocloud.i18n.model.Language.of(language))
+            return LanguageAccessor(pack, Language.of(language))
         }
 
         fun language(language: Locale): LanguageAccessor {

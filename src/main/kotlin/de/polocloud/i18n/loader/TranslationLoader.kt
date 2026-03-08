@@ -6,7 +6,7 @@ import java.util.Locale
 
 interface TranslationLoader {
 
-    fun loadMeta(pack: String): de.polocloud.i18n.model.TranslationPackMeta
+    fun loadMeta(pack: String): TranslationPackMeta
 
-    fun loadPack(meta: de.polocloud.i18n.model.TranslationPackMeta, language: Locale): de.polocloud.i18n.model.TranslationPack
+    fun loadPack(meta: TranslationPackMeta, language: Locale): TranslationPack
 }

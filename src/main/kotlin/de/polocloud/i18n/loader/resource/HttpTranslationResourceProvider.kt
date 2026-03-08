@@ -7,7 +7,7 @@ import java.net.HttpURLConnection
 import java.net.URI
 
 class HttpTranslationResourceProvider(private val baseUrl: String) :
-    de.polocloud.i18n.loader.resource.TranslationResourceProvider {
+    TranslationResourceProvider {
 
     private val logger: Logger = LogManager.getLogger(HttpTranslationResourceProvider::class.java)
 

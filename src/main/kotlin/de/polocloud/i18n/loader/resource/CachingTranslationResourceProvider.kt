@@ -9,8 +9,8 @@ import java.nio.file.attribute.DosFileAttributeView
 
 class CachingTranslationResourceProvider(
     private val cacheDirectory: File,
-    private val remoteProvider: de.polocloud.i18n.loader.resource.TranslationResourceProvider
-) : de.polocloud.i18n.loader.resource.TranslationResourceProvider {
+    private val remoteProvider: TranslationResourceProvider
+) : TranslationResourceProvider {
 
     private val gson = Gson()
 
@@ -73,7 +73,7 @@ class CachingTranslationResourceProvider(
     }
 
     private fun extractVersion(json: String): String {
-        val dto = gson.fromJson(json, _root_ide_package_.de.polocloud.i18n.loader.parser.MetaDto::class.java)
+        val dto = gson.fromJson(json, MetaDto::class.java)
         return dto.version
     }
 

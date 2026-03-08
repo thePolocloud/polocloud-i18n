@@ -87,7 +87,7 @@ Add the dependency to your project:
 
 ```kotlin
 dependencies {
-    implementation("dev.httpmarco:polocloud-i18n:<version>")
+    implementation("de.polocloud:polocloud-i18n:<version>")
 }
 ```
 

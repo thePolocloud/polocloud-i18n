@@ -10,17 +10,17 @@ import org.apache.logging.log4j.Logger
 import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 
-class TranslationManager(private val loader: de.polocloud.i18n.loader.TranslationLoader) {
+class TranslationManager(private val loader: TranslationLoader) {
 
     private val logger: Logger = LogManager.getLogger(TranslationManager::class.java)
-    private val metaCache = ConcurrentHashMap<String, de.polocloud.i18n.model.TranslationPackMeta>()
-    private val packCache = ConcurrentHashMap<String, de.polocloud.i18n.model.TranslationPack>()
+    private val metaCache = ConcurrentHashMap<String, TranslationPackMeta>()
+    private val packCache = ConcurrentHashMap<String, TranslationPack>()
 
     /**
      * Returns a fully loaded TranslationPack.
      * Lazy loads meta + language file if necessary.
      */
-    fun pack(pack: String, language: Locale): de.polocloud.i18n.model.TranslationPack {
+    fun pack(pack: String, language: Locale): TranslationPack {
         val cacheKey = cacheKey(pack, language)
 
         return packCache.computeIfAbsent(cacheKey) {
@@ -44,7 +44,7 @@ class TranslationManager(private val loader: de.polocloud.i18n.loader.Translatio
             return raw
         }
 
-        return _root_ide_package_.de.polocloud.i18n.core.format.PlaceholderFormatter.format(raw, placeholders.toMap())
+        return PlaceholderFormatter.format(raw, placeholders.toMap())
     }
 
     fun availableLanguages(pack: String): Set<Locale> {
@@ -54,14 +54,14 @@ class TranslationManager(private val loader: de.polocloud.i18n.loader.Translatio
         return meta.languages
     }
 
-    private fun loadPackInternal(pack: String, language: Locale): de.polocloud.i18n.model.TranslationPack {
+    private fun loadPackInternal(pack: String, language: Locale): TranslationPack {
         val meta = loader.loadMeta(pack)
         metaCache[pack] = meta
 
         return loader.loadPack(meta, language)
     }
 
-    private fun fallback(pack: de.polocloud.i18n.model.TranslationPack, key: String): String {
+    private fun fallback(pack: TranslationPack, key: String): String {
         val defaultLanguage = pack.meta.defaultLanguage
 
         if (pack.language == defaultLanguage) {
@@ -69,7 +69,7 @@ class TranslationManager(private val loader: de.polocloud.i18n.loader.Translatio
                 "Missing translation key '{}' in pack '{}' for language '{}'",
                 key,
                 pack.meta.name,
-                _root_ide_package_.de.polocloud.i18n.model.Language.code(pack.language)
+                Language.code(pack.language)
             )
         }
 
@@ -83,12 +83,12 @@ class TranslationManager(private val loader: de.polocloud.i18n.loader.Translatio
             "Missing translation key '{}' in pack '{}' for language '{}' (including fallback '{}')",
             key,
             pack.meta.name,
-            _root_ide_package_.de.polocloud.i18n.model.Language.code(pack.language),
-            _root_ide_package_.de.polocloud.i18n.model.Language.code(defaultLanguage)
+            Language.code(pack.language),
+            Language.code(defaultLanguage)
         )
 
         return key
     }
 
-    private fun cacheKey(pack: String, language: Locale): String = "$pack:${_root_ide_package_.de.polocloud.i18n.model.Language.code(language)}"
+    private fun cacheKey(pack: String, language: Locale): String = "$pack:${Language.code(language)}"
 }
