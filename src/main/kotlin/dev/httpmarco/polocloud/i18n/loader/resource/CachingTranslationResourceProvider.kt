@@ -39,7 +39,7 @@ class CachingTranslationResourceProvider(
         } else {
             val localVersion = extractVersion(localMetaFile.readText())
 
-            if (localVersion != remoteVersion) { //TODO better version check
+            if (isNewer(remoteVersion, localVersion)) {
                 packDir.deleteRecursively()
                 packDir.mkdirs()
                 savePackMeta(packDir, localMetaFile, remoteMetaContent)
@@ -75,5 +75,15 @@ class CachingTranslationResourceProvider(
     private fun extractVersion(json: String): String {
         val dto = gson.fromJson(json, MetaDto::class.java)
         return dto.version
+    }
+
+    private fun isNewer(remoteVersion: String, localVersion: String): Boolean {
+        val remote = remoteVersion.split(".").map { it.toIntOrNull() ?: 0 }
+        val local = localVersion.split(".").map { it.toIntOrNull() ?: 0 }
+        for (i in 0..2) {
+            val diff = (remote.getOrElse(i) { 0 }).compareTo(local.getOrElse(i) { 0 })
+            if (diff != 0) return diff > 0
+        }
+        return false
     }
 }
