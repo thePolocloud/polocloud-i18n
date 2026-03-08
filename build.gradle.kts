@@ -1,3 +1,5 @@
+apply(from = rootProject.file("gradle/version.gradle.kts"))
+
 plugins {
     kotlin("jvm") version libs.versions.kotlin.get()
     `maven-publish`
@@ -7,7 +9,7 @@ plugins {
 }
 
 group = "dev.httpmarco.polocloud"
-version = "3.0.0-pre.8-SNAPSHOT"
+// version is now set by gradle/version.gradle.kts — do NOT set it here
 
 repositories {
     mavenCentral()
