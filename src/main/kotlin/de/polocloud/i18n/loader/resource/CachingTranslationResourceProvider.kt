@@ -19,7 +19,7 @@ class CachingTranslationResourceProvider(
             cacheDirectory.mkdirs()
         }
 
-        if (!cacheDirectory.name.startsWith(".")) {
+        if (cacheDirectory.name.startsWith(".")) {
             Files.getFileAttributeView(cacheDirectory.toPath(), DosFileAttributeView::class.java)?.setHidden(true)
         }
     }
