@@ -3,10 +3,12 @@ kotlin = "2.3.0"
 nexus-publish = "2.0.0"
 
 log4j = "2.25.4"
+slf4j = "2.0.17"
 gson = "2.13.2"
 
 [libraries]
 log4j-api = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j" }
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 [plugins]

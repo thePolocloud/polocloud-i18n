@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     compileOnly(libs.log4j.api)
+    compileOnly(libs.slf4j.api)
     implementation(libs.gson)
 }
 
